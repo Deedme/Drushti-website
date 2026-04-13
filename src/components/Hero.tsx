@@ -4,13 +4,17 @@ import { useState } from "react";
 import Image from "next/image";
 
 export default function Hero() {
+  const [name, setName] = useState("");
+  const [city, setCity] = useState("");
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
+    if (name && city && email) {
       setSubmitted(true);
+      setName("");
+      setCity("");
       setEmail("");
     }
   };
@@ -45,19 +49,35 @@ export default function Hero() {
           {!submitted ? (
             <form
               onSubmit={handleSubmit}
-              className="mt-8 flex w-full max-w-md flex-col gap-3 sm:flex-row"
+              className="mt-8 flex w-full max-w-md flex-col gap-3"
             >
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Enter your name"
+                className="w-full rounded-full border border-muted-light bg-white px-5 py-3.5 text-sm text-dark outline-none transition-all placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
+              <input
+                type="text"
+                required
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="Enter your city"
+                className="w-full rounded-full border border-muted-light bg-white px-5 py-3.5 text-sm text-dark outline-none transition-all placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20"
+              />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Enter your email"
-                className="flex-1 rounded-full border border-muted-light bg-white px-5 py-3.5 text-sm text-dark outline-none transition-all placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20"
+                className="w-full rounded-full border border-muted-light bg-white px-5 py-3.5 text-sm text-dark outline-none transition-all placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20"
               />
               <button
                 type="submit"
-                className="rounded-full gradient-bg px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 whitespace-nowrap"
+                className="rounded-full gradient-bg px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/30 whitespace-nowrap"
               >
                 Join Waitlist
               </button>
