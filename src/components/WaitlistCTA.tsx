@@ -3,16 +3,46 @@
 import { useState } from "react";
 
 export default function WaitlistCTA() {
+  const [name, setName] = useState("");
+  const [city, setCity] = useState("");
   const [email, setEmail] = useState("");
   const [role, setRole] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (email && role) {
-      setSubmitted(true);
-      setEmail("");
-      setRole("");
+    const form = e.currentTarget;
+    const honeypot = form.elements.namedItem("website") as HTMLInputElement | null;
+    if (honeypot?.value) return;
+
+    if (!name || !city || !email || !role) return;
+
+    setError(null);
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, name, city, role }),
+      });
+      const data = (await res.json()) as { error?: string };
+
+      if (res.ok) {
+        setSubmitted(true);
+        setName("");
+        setCity("");
+        setEmail("");
+        setRole("");
+      } else {
+        setError(data.error ?? "Something went wrong.");
+      }
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,6 +78,30 @@ export default function WaitlistCTA() {
               className="mx-auto mt-10 max-w-lg space-y-4"
             >
               <input
+                type="text"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                className="hidden"
+                aria-hidden="true"
+              />
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Your full name"
+                className="w-full rounded-2xl border border-white/10 bg-white/10 px-5 py-4 text-sm text-white outline-none backdrop-blur-sm transition-all placeholder:text-white/40 focus:border-teal/50 focus:ring-2 focus:ring-teal/20"
+              />
+              <input
+                type="text"
+                required
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="Your city"
+                className="w-full rounded-2xl border border-white/10 bg-white/10 px-5 py-4 text-sm text-white outline-none backdrop-blur-sm transition-all placeholder:text-white/40 focus:border-teal/50 focus:ring-2 focus:ring-teal/20"
+              />
+              <input
                 type="email"
                 required
                 value={email}
@@ -69,11 +123,17 @@ export default function WaitlistCTA() {
                 <option value="counselor" className="text-dark">Counselor</option>
                 <option value="advisor" className="text-dark">Industry Advisor</option>
               </select>
+              {error ? (
+                <p className="text-center text-sm text-red-200" role="alert">
+                  {error}
+                </p>
+              ) : null}
               <button
                 type="submit"
-                className="w-full rounded-2xl bg-gradient-to-r from-teal to-primary-light py-4 text-sm font-semibold text-dark shadow-lg shadow-teal/25 transition-all hover:shadow-xl hover:shadow-teal/30 hover:-translate-y-0.5"
+                disabled={loading}
+                className="w-full rounded-2xl bg-gradient-to-r from-teal to-primary-light py-4 text-sm font-semibold text-dark shadow-lg shadow-teal/25 transition-all hover:shadow-xl hover:shadow-teal/30 hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
               >
-                Join the Waitlist — It&apos;s Free
+                {loading ? "Submitting…" : "Join the Waitlist — It's Free"}
               </button>
             </form>
           ) : (
