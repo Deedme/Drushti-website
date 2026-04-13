@@ -28,9 +28,9 @@ export default function WaitlistCTA() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, name, city, role }),
       });
-      const data = (await res.json()) as { error?: string };
+      const data = (await res.json()) as { ok?: boolean; error?: string };
 
-      if (res.ok) {
+      if (res.ok && data.ok === true) {
         setSubmitted(true);
         setName("");
         setCity("");

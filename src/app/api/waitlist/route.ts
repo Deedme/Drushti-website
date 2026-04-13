@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getSupabase } from "@/lib/supabaseClient";
+import { getWaitlistSupabase } from "@/lib/supabaseClient";
 
 type WaitlistBody = {
   email?: unknown;
@@ -11,16 +11,20 @@ type WaitlistBody = {
 };
 
 export async function POST(request: Request) {
-  const supabase = getSupabase();
+  const supabase = getWaitlistSupabase();
   if (!supabase) {
     return NextResponse.json(
       {
         error:
-          "Waitlist is not configured. Add SUPABASE_URL and SUPABASE_ANON_KEY.",
+          "Waitlist is not configured. Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY (recommended) or SUPABASE_ANON_KEY in .env.local / Vercel.",
       },
       { status: 503 },
     );
   }
+
+  const useServiceRole = Boolean(
+    process.env.SUPABASE_SERVICE_ROLE_KEY?.trim(),
+  );
 
   let body: WaitlistBody;
   try {
@@ -52,6 +56,30 @@ export async function POST(request: Request) {
     ...(role ? { role } : {}),
   };
 
+  if (useServiceRole) {
+    const { data, error } = await supabase
+      .from("waitlist")
+      .insert([row])
+      .select("id")
+      .single();
+
+    if (error) {
+      if (error.code === "23505") {
+        return NextResponse.json(
+          { error: "This email is already on the waitlist." },
+          { status: 409 },
+        );
+      }
+      console.error("waitlist insert", error);
+      return NextResponse.json(
+        { error: "Something went wrong. Please try again." },
+        { status: 500 },
+      );
+    }
+
+    return NextResponse.json({ ok: true as const, id: data.id });
+  }
+
   const { error } = await supabase.from("waitlist").insert([row]);
 
   if (error) {
@@ -68,5 +96,5 @@ export async function POST(request: Request) {
     );
   }
 
-  return NextResponse.json({ message: "You are on the list!" });
+  return NextResponse.json({ ok: true as const });
 }
