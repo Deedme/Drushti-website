@@ -1,24 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 
 export default function Hero() {
-  const [name, setName] = useState("");
-  const [city, setCity] = useState("");
-  const [email, setEmail] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (name && city && email) {
-      setSubmitted(true);
-      setName("");
-      setCity("");
-      setEmail("");
-    }
-  };
-
   return (
     <section className="relative min-h-screen overflow-hidden pt-20 md:pt-0">
       {/* Background decoration */}
@@ -46,52 +30,12 @@ export default function Hero() {
             career decisions.
           </p>
 
-          {!submitted ? (
-            <form
-              onSubmit={handleSubmit}
-              className="mt-8 flex w-full max-w-md flex-col gap-3"
-            >
-              <input
-                type="text"
-                required
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder="Enter your name"
-                className="w-full rounded-full border border-muted-light bg-white px-5 py-3.5 text-sm text-dark outline-none transition-all placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20"
-              />
-              <input
-                type="text"
-                required
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                placeholder="Enter your city"
-                className="w-full rounded-full border border-muted-light bg-white px-5 py-3.5 text-sm text-dark outline-none transition-all placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20"
-              />
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                className="w-full rounded-full border border-muted-light bg-white px-5 py-3.5 text-sm text-dark outline-none transition-all placeholder:text-muted focus:border-primary focus:ring-2 focus:ring-primary/20"
-              />
-              <button
-                type="submit"
-                className="rounded-full gradient-bg px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/30 whitespace-nowrap"
-              >
-                Join Waitlist
-              </button>
-            </form>
-          ) : (
-            <div className="mt-8 flex items-center gap-3 rounded-2xl border border-teal/30 bg-teal/5 px-6 py-4">
-              <svg className="h-6 w-6 text-teal" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="text-sm font-medium text-dark">
-                You&apos;re on the list! We&apos;ll notify you when Drushti launches.
-              </span>
-            </div>
-          )}
+          <a
+            href="#waitlist"
+            className="mt-8 inline-flex rounded-full gradient-bg px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/30 whitespace-nowrap"
+          >
+            Join Waitlist
+          </a>
 
           <p className="mt-4 text-xs text-muted">
             Join 2,000+ students, parents & counselors already on the waitlist
@@ -105,9 +49,9 @@ export default function Hero() {
             <Image
               src="/images/hero-mockup.png"
               alt="Drushti app screens showing role selection and registration"
-              width={560}
-              height={400}
-              className="relative rounded-2xl"
+              width={920}
+              height={560}
+              className="relative w-[460px] max-w-full rounded-2xl"
               priority
             />
           </div>

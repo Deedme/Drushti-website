@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 export default function AppPreview() {
   return (
     <section className="relative overflow-hidden py-24 md:py-32 bg-gradient-to-b from-white via-muted-light/15 to-white">
@@ -21,36 +19,28 @@ export default function AppPreview() {
         </div>
 
         <div className="relative mt-16">
-          <div className="absolute inset-0 bg-gradient-to-r from-teal/10 via-transparent to-blue/10 rounded-3xl blur-3xl" />
-          <div className="relative overflow-hidden rounded-3xl border border-muted-light/40 bg-white/80 p-4 shadow-2xl backdrop-blur-sm md:p-8">
-            <Image
-              src="/images/onboarding.png"
-              alt="Drushti onboarding screens showing goal tracking, strengths discovery, parent guidance, and professional advice"
-              width={1200}
-              height={600}
-              className="w-full rounded-2xl"
-            />
-          </div>
-        </div>
-
-        <div className="mt-12 grid gap-4 md:grid-cols-2">
-          <div className="relative overflow-hidden rounded-3xl border border-muted-light/40 bg-white/80 p-4 shadow-lg backdrop-blur-sm">
-            <Image
-              src="/images/counselor-parent.png"
-              alt="Counselor and parent dashboards"
-              width={600}
-              height={800}
-              className="w-full rounded-2xl"
-            />
-          </div>
-          <div className="relative overflow-hidden rounded-3xl border border-muted-light/40 bg-white/80 p-4 shadow-lg backdrop-blur-sm">
-            <Image
-              src="/images/student-features.png"
-              alt="Student features including career library, planning tools, and connections"
-              width={600}
-              height={800}
-              className="w-full rounded-2xl"
-            />
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-teal/10 via-transparent to-blue/10 blur-3xl" />
+          <div className="relative overflow-hidden rounded-3xl border border-muted-light/40 bg-white/85 p-6 shadow-2xl backdrop-blur-sm md:p-10">
+            <div className="grid items-center gap-8 md:grid-cols-2 md:gap-12">
+              <div className="max-w-md text-left">
+                <p className="text-2xl font-medium leading-relaxed text-dark md:text-3xl">
+                  One platform connecting students with parents, career
+                  counselor, and professionals in industry.
+                </p>
+              </div>
+              <div className="flex justify-center md:justify-end">
+                <video
+                  src="/videos/drushti-1.mp4"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="metadata"
+                  className="w-full max-w-[340px] rounded-2xl"
+                  aria-label="Drushti app preview video"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
